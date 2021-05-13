@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "backend"
+version = "0.1.0"
+description = ""
+authors = ["Shahriyar Rzayev <rzayev.sehriyar@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+fastapi = "^0.64.0"
+gino = {extras = ["pg", "starlette"], version = "^1.0.1"}
+uvicorn = "^0.13.4"
+gunicorn = "^20.1.0"
+alembic = "^1.6.2"
+psycopg2 = "^2.8.6"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+pytest-cov = "^2.10.1"
+requests = "^2.25.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
