@@ -1,7 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.core.config import settings
+from .core.config import settings
+from .database import db
 
 
 def get_application():
@@ -15,6 +16,8 @@ def get_application():
         allow_headers=["*"],
     )
 
+    db.init_app(_app)
+    
     return _app
 
 
