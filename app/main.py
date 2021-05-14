@@ -1,8 +1,14 @@
+import sys
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from .core.config import settings
 from .database import db
+
+sys.path.append('..')
+
+from backend.users.api.controller import router as user_router
 
 
 def get_application():
@@ -17,6 +23,8 @@ def get_application():
     )
 
     db.init_app(_app)
+
+    _app.include_router(user_router, prefix='/users')
     
     return _app
 
