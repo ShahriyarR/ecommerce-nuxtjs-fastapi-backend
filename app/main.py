@@ -9,6 +9,7 @@ from .database import db
 sys.path.append('..')
 
 from backend.users.api.controller import router as user_router
+from backend.users.authentication import Authenticate
 
 
 def get_application():
@@ -22,11 +23,16 @@ def get_application():
         allow_headers=["*"],
     )
 
+    # Init the database connection
     db.init_app(_app)
 
+    # Register routes here
     _app.include_router(user_router, prefix='/users')
     
     return _app
 
+
+# Init the Authentication service here
+auth_service = Authenticate(db=db)
 
 app = get_application()

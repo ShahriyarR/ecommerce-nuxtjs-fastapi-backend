@@ -51,3 +51,10 @@ class UserPublic(DateTimeModelMixin, UserBase):
 # TODO: UserUpdate for profile update can be here
 
 # TODO: UserPasswordUpdate for password update can be here
+
+class UserPasswordUpdate(CoreModel):
+    """
+    Users can change their password
+    """
+    password: constr(min_length=7, max_length=100)
+    salt: str
