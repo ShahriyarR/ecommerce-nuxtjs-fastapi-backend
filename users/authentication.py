@@ -28,8 +28,5 @@ class Authenticate:
 
         new_password = self.create_salt_and_hashed_password(plaintext_password=new_user.password)
         new_user_params = new_user.copy(update=new_password.dict())
-        created_user = User(**new_user_params)
-        self.db.add(created_user)
-        self.db.commit()
-        self.db.refresh(created_user)
-        return UserInDB(created_user.dict())
+        created_user = await User.create(**new_user_params.dict())
+        return UserInDB(**created_user)
