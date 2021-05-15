@@ -1,15 +1,11 @@
 import bcrypt
-import gino
 from passlib.context import CryptContext
-from backend.users.schemas import UserPasswordUpdate, UserCreate, UserInDB
+from .schemas import UserPasswordUpdate
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 class Authenticate:
-    def __init__(self, db: gino.Gino):
-        self.db = db
-
     def create_salt_and_hashed_password(self, *, plaintext_password: str) -> UserPasswordUpdate:
         salt = self.generate_salt()
         hashed_password = self.hash_password(password=plaintext_password, salt=salt)
@@ -22,11 +18,3 @@ class Authenticate:
     @staticmethod
     def hash_password(*, password: str, salt: str) -> str:
         return pwd_context.hash(password + salt)
-
-    async def register_new_user(self, new_user: UserCreate) -> UserInDB:
-        from backend.users.models import User
-
-        new_password = self.create_salt_and_hashed_password(plaintext_password=new_user.password)
-        new_user_params = new_user.copy(update=new_password.dict())
-        created_user = await User.create(**new_user_params.dict())
-        return UserInDB(**created_user)

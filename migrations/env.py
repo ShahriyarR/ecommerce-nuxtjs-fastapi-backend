@@ -1,3 +1,4 @@
+import sys
 from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config
@@ -18,10 +19,10 @@ fileConfig(config.config_file_name)
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 # target_metadata = None
-
-from app.core.config import settings
-from app.main import db
-from users.models import User
+sys.path.append('..')
+from backend.app.core.config import settings
+from backend.app.database import db
+from backend.users.models import User
 
 config.set_main_option('sqlalchemy.url', settings.DATABASE_URI)
 target_metadata = db

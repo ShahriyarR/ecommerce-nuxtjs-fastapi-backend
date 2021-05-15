@@ -1,21 +1,27 @@
 import sys
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
 from .core.config import settings
 from .database import db
+from backend.users.api.controller import router as user_router
 
 sys.path.append('..')
 
-from backend.users.api.controller import router as user_router
-from backend.users.authentication import Authenticate
+app = FastAPI(title=settings.PROJECT_NAME)
+db.init_app(app)
 
 
-def get_application():
-    _app = FastAPI(title=settings.PROJECT_NAME)
+@app.on_event("startup")
+async def startup():
+    print("app started")
 
-    _app.add_middleware(
+
+@app.on_event("shutdown")
+async def shutdown():
+    print("SHUTDOWN")
+
+
+app.add_middleware(
         CORSMiddleware,
         allow_origins=[str(origin) for origin in settings.BACKEND_CORS_ORIGINS],
         allow_credentials=True,
@@ -23,16 +29,4 @@ def get_application():
         allow_headers=["*"],
     )
 
-    # Init the database connection
-    db.init_app(_app)
-
-    # Register routes here
-    _app.include_router(user_router, prefix='/users')
-    
-    return _app
-
-
-# Init the Authentication service here
-auth_service = Authenticate(db=db)
-
-app = get_application()
+app.include_router(user_router)

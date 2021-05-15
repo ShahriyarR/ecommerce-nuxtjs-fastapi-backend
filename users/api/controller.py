@@ -1,5 +1,4 @@
-from fastapi import APIRouter, status, Body
-from fastapi.responses import JSONResponse
+from fastapi import APIRouter
 from ..schemas import UserCreate, UserInDB, UserPublic
 
 router = APIRouter()
@@ -12,6 +11,6 @@ router = APIRouter()
     response_model=UserPublic,
 )
 async def user_create(user: UserCreate) -> UserInDB:
-    from backend.app.main import auth_service
+    from ..crud import create_user
 
-    return await auth_service.register_new_user(user)
+    return await create_user(user)
