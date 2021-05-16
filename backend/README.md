@@ -1,0 +1,1 @@
+# REPO for blog post series [Building simple E-Commerce with NuxtJS and FastAPI](https://www.azepug.az/posts/fastapi/building-ecommerce.html)

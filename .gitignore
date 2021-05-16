@@ -138,3 +138,5 @@ cython_debug/
 
 # Text Editor
 .vscode
+.idea
+.venv_38
