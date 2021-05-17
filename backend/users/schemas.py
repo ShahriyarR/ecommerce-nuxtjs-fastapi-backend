@@ -2,6 +2,8 @@ import string
 from pydantic import EmailStr, constr, validator
 from backend.app.schemas import CoreModel, DateTimeModelMixin, IDModelMixin
 from typing import Optional
+from datetime import datetime, timedelta
+from backend.app.core.config import settings
 
 
 # simple check for valid username
@@ -10,6 +12,33 @@ def validate_username(username: str) -> str:
     assert all(char in allowed for char in username), "Invalid characters in username."
     assert len(username) >= 3, "Username must be 3 characters or more."
     return username
+
+# Add JWT schemas
+
+
+class JWTMeta(CoreModel):
+    iss: str = "azepug.az"
+    aud: str = settings.JWT_AUDIENCE
+    iat: float = datetime.timestamp(datetime.utcnow())
+    exp: float = datetime.timestamp(datetime.utcnow() + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES))
+
+
+class JWTCreds(CoreModel):
+    """How we'll identify users"""
+    sub: EmailStr
+    username: str
+
+
+class JWTPayload(JWTMeta, JWTCreds):
+    """
+    JWT Payload right before it's encoded - combine meta and username
+    """
+    pass
+
+
+class AccessToken(CoreModel):
+    access_token: str
+    token_type: str
 
 
 class UserBase(CoreModel):
@@ -39,6 +68,18 @@ class UserCreate(CoreModel):
         orm_mode = True
 
 
+class UserLogin(CoreModel):
+    """
+    username and password are required for logging in the user
+    """
+    username: str
+    password: constr(min_length=7, max_length=100)
+
+    @validator("username", pre=True)
+    def username_is_valid(cls, username: str) -> str:
+        return validate_username(username)
+
+
 class UserInDB(DateTimeModelMixin, UserBase):
     """
     Add in id, created_at, updated_at, and user's password and salt
@@ -51,6 +92,7 @@ class UserInDB(DateTimeModelMixin, UserBase):
 
 
 class UserPublic(DateTimeModelMixin, UserBase):
+    access_token: Optional[AccessToken]
 
     class Config:
         orm_mode = True

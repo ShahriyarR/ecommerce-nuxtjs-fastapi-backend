@@ -14,3 +14,10 @@ async def create_user(new_user: UserCreate) -> UserInDB:
         created_user = await User.create(**new_user_updated.dict())
 
     return UserInDB.from_orm(created_user)
+
+
+async def get_user_by_username(user_name: str) -> UserInDB:
+    async with db.with_bind(settings.DATABASE_URI) as engine:
+        found_user = await User.query.where(User.username == user_name).gino.first()
+
+    return UserInDB.from_orm(found_user)
