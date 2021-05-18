@@ -2,13 +2,24 @@ import sys
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .core.config import settings
-from .database import db
+from gino.ext.starlette import Gino
 from backend.users.api.controller import router as user_router
+from sqlalchemy import MetaData
 
 sys.path.append('..')
 
+__all__ = ['app', 'db']
+
 app = FastAPI(title=settings.PROJECT_NAME)
-db.init_app(app)
+db: MetaData = Gino(
+        app,
+        dsn=settings.DATABASE_URI,
+        pool_min_size=3,
+        pool_max_size=20,
+        retry_limit=10,
+        retry_interval=10,
+        ssl=None,
+    )
 
 
 @app.on_event("startup")
