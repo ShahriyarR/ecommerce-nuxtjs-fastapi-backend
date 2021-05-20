@@ -39,8 +39,8 @@ class Authenticate:
             return None
         jwt_meta = JWTMeta(
             aud=audience,
-            iat=datetime.timestamp(datetime.utcnow()),
-            exp=datetime.timestamp(datetime.utcnow() + timedelta(minutes=expires_in)),
+            iat=datetime.timestamp(datetime.now()),
+            exp=datetime.timestamp(datetime.now() + timedelta(minutes=expires_in)),
         )
         jwt_creds = JWTCreds(sub=user.email, username=user.username)
         token_payload = JWTPayload(

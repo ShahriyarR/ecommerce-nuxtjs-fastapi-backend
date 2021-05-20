@@ -19,8 +19,8 @@ def validate_username(username: str) -> str:
 class JWTMeta(CoreModel):
     iss: str = "azepug.az"
     aud: str = settings.JWT_AUDIENCE
-    iat: float = datetime.timestamp(datetime.utcnow())
-    exp: float = datetime.timestamp(datetime.utcnow() + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES))
+    iat: float = datetime.timestamp(datetime.now())
+    exp: float = datetime.timestamp(datetime.now() + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES))
 
 
 class JWTCreds(CoreModel):
