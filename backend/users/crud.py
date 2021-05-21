@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 from .schemas import UserCreate, UserInDB
 from backend.users import auth_service
 from .models import User
@@ -14,5 +15,6 @@ async def create_user(new_user: UserCreate) -> UserInDB:
 
 async def get_user_by_username(user_name: str) -> UserInDB:
     found_user = await User.query.where(User.username == user_name).gino.first()
-
-    return UserInDB.from_orm(found_user)
+    if found_user:
+        return UserInDB.from_orm(found_user)
+    raise HTTPException(status_code=404, detail="User with given username not found")

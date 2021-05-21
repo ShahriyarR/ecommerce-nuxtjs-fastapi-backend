@@ -1,10 +1,10 @@
 import pytest
-import asyncio
 from backend import db
 from backend.app.core.config import settings
 
 
-@pytest.fixture
+@pytest.yield_fixture()
 async def init_db():
     conn = await db.set_bind(settings.DATABASE_URI)
-    return conn
+    yield conn
+    await conn.close()
