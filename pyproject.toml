@@ -15,6 +15,7 @@ psycopg2 = "^2.8.6"
 passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 pydantic = {extras = ["email", "dotenv"], version = "^1.8.2"}
 python-jose = {extras = ["cryptography"], version = "^3.2.0"}
+gino-admin = "^0.2.5"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
