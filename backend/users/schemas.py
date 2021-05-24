@@ -41,6 +41,10 @@ class AccessToken(CoreModel):
     token_type: str
 
 
+class TokenData(CoreModel):
+    username: Optional[str] = None
+
+
 class UserBase(CoreModel):
     """
     Leaving off password and salt from base model
@@ -100,7 +104,6 @@ class UserPublic(DateTimeModelMixin, UserBase):
 
 # TODO: UserUpdate for profile update can be here
 
-# TODO: UserPasswordUpdate for password update can be here
 
 class UserPasswordUpdate(CoreModel):
     """
