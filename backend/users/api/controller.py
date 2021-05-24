@@ -1,7 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends
 from ..schemas import UserCreate, UserInDB, UserPublic, UserLogin, AccessToken
-from backend.users import auth_service, oauth2_scheme
-from backend.app.core.config import settings
+from backend.users import auth_service, get_current_active_user
 
 router = APIRouter()
 
@@ -42,5 +41,5 @@ async def user_login(user: UserLogin) -> UserPublic:
     description="Get current logged in user",
     response_model=UserPublic,
 )
-async def get_me(current_user: UserInDB = Depends(auth_service.get_current_active_user)) -> UserInDB:
+async def get_me(current_user: UserInDB = Depends(get_current_active_user)) -> UserInDB:
     return current_user

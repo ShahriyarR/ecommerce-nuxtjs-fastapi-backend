@@ -7,4 +7,6 @@ class CategoryCreate(CoreModel):
 
 
 class CategoryInDB(CategoryCreate, IDModelMixin):
-    pass
+
+    class Config:
+        orm_mode = True

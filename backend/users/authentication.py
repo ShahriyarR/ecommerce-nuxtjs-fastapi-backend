@@ -92,15 +92,14 @@ class Authenticate:
             raise credentials_exception
         return user
 
-    @staticmethod
-    async def get_current_active_user(current_user: UserInDB = Depends(get_current_user)) -> UserInDB:
-        if not current_user.is_active:
-            raise HTTPException(status_code=400, detail="Inactive user")
-        return current_user
 
-    @staticmethod
-    async def check_if_user_is_admin(current_user: UserInDB = Depends(get_current_active_user)) -> UserInDB:
-        if not current_user.is_superuser:
-            raise HTTPException(status_code=401, detail="You have not enough privileges")
-        return current_user
+async def get_current_active_user(current_user: UserInDB = Depends(Authenticate().get_current_user)) -> UserInDB:
+    if not current_user.is_active:
+        raise HTTPException(status_code=400, detail="Inactive user")
+    return current_user
 
+
+async def check_if_user_is_admin(current_user: UserInDB = Depends(get_current_active_user)) -> UserInDB:
+    if not current_user.is_superuser:
+        raise HTTPException(status_code=401, detail="You have not enough privileges")
+    return current_user
