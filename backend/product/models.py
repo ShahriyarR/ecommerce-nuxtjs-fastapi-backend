@@ -20,4 +20,6 @@ class Product(db.Model):
     price = db.Column(db.Numeric(), nullable=False)
     image = db.Column(db.String(), nullable=True)
     thumbnail = db.Column(db.String(), nullable=True)
-    date_added = db.Column(db.DateTime(), nullable=False)
+    created_at = db.Column(db.DateTime(), nullable=False)
+    updated_at = db.Column(db.DateTime(), nullable=False)
+
