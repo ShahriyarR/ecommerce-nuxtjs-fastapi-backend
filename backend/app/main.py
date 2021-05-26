@@ -1,5 +1,7 @@
 import sys
+import os
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from .core.config import settings
 from gino.ext.starlette import Gino
@@ -10,6 +12,9 @@ from sqlalchemy import MetaData
 sys.path.append('..')
 
 __all__ = ['app', 'db']
+
+BASEDIR = os.path.dirname(__file__)
+
 
 app = FastAPI(title=settings.PROJECT_NAME)
 db: MetaData = Gino(
@@ -43,3 +48,5 @@ app.add_middleware(
 
 app.include_router(user_router, prefix='/users')
 app.include_router(product_router, prefix='/product')
+
+app.mount("/static", StaticFiles(directory=BASEDIR + "/statics"), name="static")

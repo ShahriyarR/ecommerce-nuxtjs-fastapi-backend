@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, UploadFile, File, Body, Form
 from ..schemas import CategoryInDB, CategoryCreate, ProductCreate, ProductInDB
 from backend.users import check_if_user_is_admin
-from ..helpers import handle_file_upload
+from backend.app.helpers import handle_file_upload
 from typing import Optional
 
 router = APIRouter()

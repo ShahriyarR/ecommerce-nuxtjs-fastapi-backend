@@ -8,7 +8,7 @@ BASEDIR = os.path.dirname(__file__)
 
 async def handle_file_upload(file: UploadFile) -> str:
     _, ext = os.path.splitext(file.filename)
-    img_dir = os.path.join(BASEDIR, 'uploads/')
+    img_dir = os.path.join(BASEDIR, 'statics/media/')
     if not os.path.exists(img_dir):
         os.makedirs(img_dir)
     content = await file.read()
