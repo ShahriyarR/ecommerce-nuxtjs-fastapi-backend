@@ -34,11 +34,14 @@ async def product_create(category: int = Form(...),
                          description: str = Form(...),
                          image: UploadFile = File(...)
                          ) -> ProductInDB:
+    from ..crud import create_product
+
     product = ProductCreate(category=category,
                             name=name,
                             slug=slug,
                             price=price,
                             description=description)
-    product.image = await handle_file_upload(image)
-    # here we put id=10 manually for test purposes originally it should came from database
-    return ProductInDB(id=10, **product.dict())
+    image_, thumb_image = await handle_file_upload(image)
+    product.image = image_
+    product.thumbnail = thumb_image
+    return await create_product(product=product)
