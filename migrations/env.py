@@ -23,6 +23,7 @@ from backend import settings
 from backend import db
 from backend.users.models import User
 from backend.product.models import Category, Product
+from backend.order.models import Order, OrderItem
 
 config.set_main_option('sqlalchemy.url', settings.DATABASE_URI)
 target_metadata = db
